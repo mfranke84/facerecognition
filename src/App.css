@@ -1,5 +1,15 @@
 .App {
   text-align: center;
+  color: white;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  cursor: pointer;
 }
 
 .App-logo {
