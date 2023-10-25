@@ -11,9 +11,31 @@ class App extends React.Component{
     super();
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {}
     }
   }
+
+  calculateFacePosition = (data) => {
+    console.log(data)
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
+    const image = document.getElementById('inputImage')
+    const width = Number(image.width)
+    const height = Number(image.height)
+    
+    return{
+      top: height * clarifaiFace.top_row,
+      right: width - (width*clarifaiFace.right_col),
+      bottom: height - (height*clarifaiFace.bottom_row),
+      left: width * clarifaiFace.left_col
+    }
+  }
+
+  displayFaceBox = (box) => {
+    this.setState({box: box})
+  }
+
+
 
   async requestAPIData(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,8 +89,7 @@ class App extends React.Component{
 
     const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     const data = await response.json()
-    console.log(data)
-    
+    this.displayFaceBox(this.calculateFacePosition(data))
   }
 
   onInputChange = (event) => {
@@ -88,7 +109,7 @@ class App extends React.Component{
         <Navigation />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition imageInput={this.state.imageUrl}/>      
+        <FaceRecognition faceBox={this.state.box} imageInput={this.state.imageUrl}/>      
         <ParticlesBg type="cobweb" bg={true} />
       </div>
   
