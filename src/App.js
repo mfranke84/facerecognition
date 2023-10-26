@@ -5,6 +5,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import ParticlesBg from 'particles-bg'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import SigInForm from './components/SignInForm/SignInForm';
 
 class App extends React.Component{
   constructor(){
@@ -12,13 +13,17 @@ class App extends React.Component{
     this.state = {
       input: '',
       imageUrl: '',
-      box: {}
+      box: {},
+      route: "signin"
     }
   }
 
-  calculateFacePosition = (data) => {
-    console.log(data)
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
+  componentDidUpdate(){
+    console.log(this.state.box)
+  }
+
+  calculateFacePosition = (data) => { 
+    const clarifaiFace = data.region_info.bounding_box
     const image = document.getElementById('inputImage')
     const width = Number(image.width)
     const height = Number(image.height)
@@ -31,10 +36,19 @@ class App extends React.Component{
     }
   }
 
-  displayFaceBox = (box) => {
+  setFaceBox = (box) => {
     this.setState({box: box})
   }
 
+  createFaceBox = (box) => {
+    
+    const imageContainer = document.getElementById('imageContainer')
+    const faceBoxItem = document.createElement('div')
+    faceBoxItem.className = "bounding_box"
+    faceBoxItem.style=`inset: ${box.top}px ${box.right}px ${box.bottom}px ${box.left}px`
+    console.log(imageContainer)
+    imageContainer.appendChild(faceBoxItem)
+  }
 
 
   async requestAPIData(){
@@ -89,7 +103,14 @@ class App extends React.Component{
 
     const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     const data = await response.json()
-    this.displayFaceBox(this.calculateFacePosition(data))
+    //this.setFaceBox(this.calculateFacePosition(data))
+    const dataArray = data.outputs[0].data.regions
+    this.setFaceBox(dataArray)
+    console.log(this.state.box)
+    dataArray.forEach(element => {
+      this.createFaceBox(this.calculateFacePosition(element))
+    });
+
   }
 
   onInputChange = (event) => {
@@ -107,9 +128,10 @@ class App extends React.Component{
     return (
       <div className="App">
         <Navigation />
+        <SigInForm />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition faceBox={this.state.box} imageInput={this.state.imageUrl}/>      
+        <FaceRecognition imageInput={this.state.imageUrl}/>      
         <ParticlesBg type="cobweb" bg={true} />
       </div>
   
