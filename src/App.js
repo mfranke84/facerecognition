@@ -5,6 +5,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import ParticlesBg from 'particles-bg'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+import SignInForm from './components/SignInForm/SignInForm';
 
 class App extends React.Component{
   constructor(){
@@ -12,7 +13,8 @@ class App extends React.Component{
     this.state = {
       input: '',
       imageUrl: '',
-      box: {}
+      box: {},
+      route: 'signin'
     }
   }
 
@@ -103,13 +105,22 @@ class App extends React.Component{
     this.requestAPIData()
   }
 
+  onRouteChange = () => {
+    this.setState({ route: 'home'})
+  }
+
   render() {
     return (
       <div className="App">
         <Navigation />
-        <Rank />
-        <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <FaceRecognition faceBox={this.state.box} imageInput={this.state.imageUrl}/>      
+        { this.state.route === 'signin'
+         ? <SignInForm onRouteChange={this.onRouteChange}/>
+         : <div>
+            <Rank />
+            <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+            <FaceRecognition faceBox={this.state.box} imageInput={this.state.imageUrl}/>      
+          </div>
+         }
         <ParticlesBg type="cobweb" bg={true} />
       </div>
   
