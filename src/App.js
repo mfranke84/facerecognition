@@ -6,6 +6,7 @@ import Rank from './components/Rank/Rank';
 import ParticlesBg from 'particles-bg'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignInForm from './components/SignInForm/SignInForm';
+import Register from './components/Register/Register';
 
 class App extends React.Component{
   constructor(){
@@ -105,14 +106,14 @@ class App extends React.Component{
     this.requestAPIData()
   }
 
-  onRouteChange = () => {
-    this.setState({ route: 'home'})
+  onRouteChange = (route) => {
+    this.setState({ route: route})
   }
 
   render() {
     return (
       <div className="App">
-        <Navigation />
+        <Navigation onRouteChange={this.onRouteChange} />
         { this.state.route === 'signin'
          ? <SignInForm onRouteChange={this.onRouteChange}/>
          : <div>
