@@ -6,7 +6,7 @@ const Register = ({onRouteChange}) => {
             <main class="pa4 black-80">
                 <form class="measure">
                     <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
-                    <legend class="f1 fw6 ph0 mh0">Sign In</legend>
+                    <legend class="f1 fw6 ph0 mh0">Register</legend>
                     <div class="mt3">
                         <label class="db fw6 lh-copy f6" for="email-address">Name</label>
                         <input class="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="name" name="name"  id="name"/>
@@ -21,10 +21,7 @@ const Register = ({onRouteChange}) => {
                     </div>
                     </fieldset>
                     <div class="">
-                    <input onClick={() => onRouteChange('home')} class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in"n />
-                    </div>
-                    <div class="lh-copy mt3">
-                    <a href="#0" class="f6 link dim black db">Sign up</a>
+                    <input onClick={() => onRouteChange('signin')} class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Register"n />
                     </div>
                 </form>
             </main>
