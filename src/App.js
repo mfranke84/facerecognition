@@ -15,29 +15,29 @@ class App extends React.Component{
       input: '',
       imageUrl: '',
       box: {},
-      route: 'signin'
+      route: 'signin',
+      isSignedIn: false
     }
   }
 
-  calculateFacePosition = (data) => {
-    console.log(data)
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
-    const image = document.getElementById('inputImage')
-    const width = Number(image.width)
-    const height = Number(image.height)
-    
-    return{
-      top: height * clarifaiFace.top_row,
-      right: width - (width*clarifaiFace.right_col),
-      bottom: height - (height*clarifaiFace.bottom_row),
-      left: width * clarifaiFace.left_col
-    }
+calculateFacePosition = (data) => {
+  
+  const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
+  const image = document.getElementById('inputImage')
+  const width = Number(image.width)
+  const height = Number(image.height)
+  
+  return{
+    top: height * clarifaiFace.top_row,
+    right: width - (width*clarifaiFace.right_col),
+    bottom: height - (height*clarifaiFace.bottom_row),
+    left: width * clarifaiFace.left_col
   }
+}
 
-  displayFaceBox = (box) => {
-    this.setState({box: box})
-  }
-
+displayFaceBox = (box) => {
+  this.setState({box: box})
+}
 
 
   async requestAPIData(){
@@ -107,20 +107,36 @@ class App extends React.Component{
   }
 
   onRouteChange = (route) => {
+    if (route === 'signout'){
+      this.setState({isSignedIn: false})
+    } else if (route === 'home'){
+      this.setState({isSignedIn: true})
+    } 
     this.setState({ route: route})
+
   }
 
   render() {
+     const {isSignedIn, imageUrl, route, box} = this.state;
     return (
       <div className="App">
-        <Navigation onRouteChange={this.onRouteChange} />
-        { this.state.route === 'signin'
-         ? <SignInForm onRouteChange={this.onRouteChange}/>
-         : <div>
+        <Navigation onRouteChange={this.onRouteChange} isSignedIn={
+          isSignedIn} />
+        { 
+        route === 'home'
+         ? (<div>
             <Rank />
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-            <FaceRecognition faceBox={this.state.box} imageInput={this.state.imageUrl}/>      
-          </div>
+            <FaceRecognition faceBox={
+              box} imageInput={
+              imageUrl}/>      
+          </div>) 
+         : (
+           
+          route === 'signin'
+           ? <SignInForm onRouteChange={this.onRouteChange}/>
+           : <Register onRouteChange={this.onRouteChange}/>
+         )
          }
         <ParticlesBg type="cobweb" bg={true} />
       </div>
