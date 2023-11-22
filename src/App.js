@@ -16,9 +16,29 @@ class App extends React.Component{
       imageUrl: '',
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
+
+loadUser = (data) => {
+  this.setState( { user: {
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    entries: data.entries,
+    joined: data.joined
+  }
+  })
+}
+
+
 
 calculateFacePosition = (data) => {
   
@@ -117,15 +137,14 @@ displayFaceBox = (box) => {
   }
 
   render() {
-     const {isSignedIn, imageUrl, route, box} = this.state;
+     const {isSignedIn, imageUrl, route, box, user} = this.state;
     return (
       <div className="App">
-        <Navigation onRouteChange={this.onRouteChange} isSignedIn={
-          isSignedIn} />
+        <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
         { 
         route === 'home'
          ? (<div>
-            <Rank />
+            <Rank user={user.name} entries={user.entries}/>
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
             <FaceRecognition faceBox={
               box} imageInput={
@@ -134,8 +153,8 @@ displayFaceBox = (box) => {
          : (
            
           route === 'signin'
-           ? <SignInForm onRouteChange={this.onRouteChange}/>
-           : <Register onRouteChange={this.onRouteChange}/>
+           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
+           : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
          )
          }
         <ParticlesBg type="cobweb" bg={true} />
