@@ -112,7 +112,22 @@ displayFaceBox = (box) => {
 
     const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     const data = await response.json()
-    this.displayFaceBox(this.calculateFacePosition(data))
+    if (data){
+      fetch("http://localhost:3000/image", {
+        method: 'put',
+            headers: { 
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+      })
+      .then(response => response.json())
+      .then(count => {
+        this.setState(Object.assign(this.state.user,{entries: count}))
+      })
+      this.displayFaceBox(this.calculateFacePosition(data))
+    }
   }
 
   onInputChange = (event) => {
