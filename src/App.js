@@ -8,23 +8,25 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignInForm from './components/SignInForm/SignInForm';
 import Register from './components/Register/Register';
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 class App extends React.Component{
   constructor(){
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
 loadUser = (data) => {
@@ -125,9 +127,9 @@ displayFaceBox = (box) => {
       })
       .then(response => response.json())
       .then(count => {
-        console.log(count)
         this.setState(Object.assign(this.state.user,{entries: count}))
       })
+      .catch(err => console.log("Could not get user's entries"))
       this.displayFaceBox(this.calculateFacePosition(data))
     }
   }
@@ -145,7 +147,7 @@ displayFaceBox = (box) => {
 
   onRouteChange = (route) => {
     if (route === 'signout'){
-      this.setState({isSignedIn: false})
+      this.setState(initialState);
     } else if (route === 'home'){
       this.setState({isSignedIn: true})
     } 
