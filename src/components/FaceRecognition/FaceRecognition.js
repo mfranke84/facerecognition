@@ -1,7 +1,7 @@
 import React from "react";
 import './FaceRecognition.css';
 
-const FaceRecognition = ({faceBox, imageInput}) => {
+const FaceRecognition = ({ imageInput, faceBox }) => {
     return (
         <div className="center ma">
             <div id="imageContainer" className="absolute mt2">

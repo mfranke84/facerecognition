@@ -56,6 +56,7 @@ calculateFacePosition = (data) => {
 }
 
 displayFaceBox = (box) => {
+  console.log(box);
   this.setState({box: box})
 }
 
@@ -124,6 +125,7 @@ displayFaceBox = (box) => {
       })
       .then(response => response.json())
       .then(count => {
+        console.log(count)
         this.setState(Object.assign(this.state.user,{entries: count}))
       })
       this.displayFaceBox(this.calculateFacePosition(data))
@@ -152,18 +154,17 @@ displayFaceBox = (box) => {
   }
 
   render() {
-     const {isSignedIn, imageUrl, route, box, user} = this.state;
+     const {isSignedIn, imageUrl, route, box} = this.state;
+     
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
         { 
         route === 'home'
          ? (<div>
-            <Rank user={user.name} entries={user.entries}/>
+            <Rank user={this.state.user.name} entries={this.state.user.entries}/>
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-            <FaceRecognition faceBox={
-              box} imageInput={
-              imageUrl}/>      
+            <FaceRecognition faceBox={box} imageInput={imageUrl}/>      
           </div>) 
          : (
            
