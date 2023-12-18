@@ -43,7 +43,6 @@ loadUser = (data) => {
 
 
 calculateFacePosition = (data) => {
-  
   const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box
   const image = document.getElementById('inputImage')
   const width = Number(image.width)
@@ -58,11 +57,45 @@ calculateFacePosition = (data) => {
 }
 
 displayFaceBox = (box) => {
-  console.log(box);
+  
   this.setState({box: box})
 }
 
-
+requestAPIData = () => {
+  fetch("http://localhost:3000/imageurl", {
+      method: 'post',
+          headers: { 
+              'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            url: this.state.input
+          })
+    })
+  .then(response => response.json())
+  .then( data => {
+    if (data){
+      fetch("http://localhost:3000/image", {
+        method: 'put',
+            headers: { 
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+      })
+      .then(response => response.json())
+      .then(count => {
+        this.setState(Object.assign(this.state.user,{entries: count}))
+      })
+      .catch(err => console.log("Could not get user's entries"))
+      console.log(data.outputs[0].data.regions[0].region_info.bounding_box)
+      this.displayFaceBox(this.calculateFacePosition(data))
+    }
+  })
+  .catch(err => "Unable to work with API")
+    
+}
+/*
   async requestAPIData(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     // In this section, we set the user authentication, user and app ID, model details, and the URL
@@ -133,6 +166,7 @@ displayFaceBox = (box) => {
       this.displayFaceBox(this.calculateFacePosition(data))
     }
   }
+  */
 
   onInputChange = (event) => {
     this.setState({ input: event.target.value}) 
