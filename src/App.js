@@ -62,7 +62,7 @@ displayFaceBox = (box) => {
 }
 
 requestAPIData = () => {
-  fetch("http://localhostTest:3000/imageurl", {
+  fetch("https://facerecognitionbrain-api.azurewebsites.net//imageurl", {
       method: 'post',
           headers: { 
               'content-type': 'application/json'
@@ -74,7 +74,7 @@ requestAPIData = () => {
   .then(response => response.json())
   .then( data => {
     if (data){
-      fetch("http://localhost:3000/image", {
+      fetch("https://facerecognitionbrain-api.azurewebsites.net/image", {
         method: 'put',
             headers: { 
                 'content-type': 'application/json'
@@ -149,7 +149,7 @@ requestAPIData = () => {
     const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     const data = await response.json()
     if (data){
-      fetch("http://localhost:3000/image", {
+      fetch("https://facerecognitionbrain-api.azurewebsites.net/image", {
         method: 'put',
             headers: { 
                 'content-type': 'application/json'

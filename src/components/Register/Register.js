@@ -23,7 +23,7 @@ class Register extends React.Component{
     }
 
     onRegister = () => {
-        fetch('http://localhost:3000/register',{
+        fetch('https://facerecognitionbrain-api.azurewebsites.net/register',{
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
