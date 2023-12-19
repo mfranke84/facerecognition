@@ -62,7 +62,7 @@ displayFaceBox = (box) => {
 }
 
 requestAPIData = () => {
-  fetch("http://localhost:3000/imageurl", {
+  fetch("http://localhostTest:3000/imageurl", {
       method: 'post',
           headers: { 
               'content-type': 'application/json'
