@@ -12,7 +12,7 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: {},
-  route: 'signin',
+  route: 'signIn',
   isSignedIn: false,
   errorLogin: "",
   user: {
@@ -190,19 +190,26 @@ requestAPIData = () => {
     if (route === 'signout'){
       this.setState(initialState);
     } else if (route === 'home'){
-      this.setState({isSignedIn: true})
+      this.setState({
+        isSignedIn: true,
+        route: route
+      })
+    } else {
+      this.setState({
+        route: route
+      })
     } 
-    this.setState({ route: route, errorLogin:''})
-
+    
   }
 
   render() {
-     const {isSignedIn, imageUrl, route, box} = this.state;
-     
+     const {isSignedIn, imageUrl, route, box, errorLogin} = this.state;
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
+        
         { 
+        
         route === 'home'
          ? (<div>
             <Rank user={this.state.user.name} entries={this.state.user.entries}/>
@@ -210,8 +217,8 @@ requestAPIData = () => {
             <FaceRecognition faceBox={box} imageInput={imageUrl}/>      
           </div>) 
          : (
-          route === 'signin'
-           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser} showLoginFail={this.showLoginFail} errorLogin={this.state.errorLogin}/>
+          route === 'signIn'
+           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser} showLoginFail={this.showLoginFail} errorLogin={errorLogin}/>
            : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
          )
          }
