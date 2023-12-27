@@ -14,6 +14,7 @@ const initialState = {
   box: {},
   route: 'signin',
   isSignedIn: false,
+  errorLogin: "",
   user: {
     id: '',
     name: '',
@@ -37,6 +38,12 @@ loadUser = (data) => {
     entries: data.entries,
     joined: data.joined
   }
+  })
+}
+
+showLoginFail = (data) => {
+  this.setState({
+    errorLogin: data
   })
 }
 
@@ -185,7 +192,7 @@ requestAPIData = () => {
     } else if (route === 'home'){
       this.setState({isSignedIn: true})
     } 
-    this.setState({ route: route})
+    this.setState({ route: route, errorLogin:''})
 
   }
 
@@ -203,9 +210,8 @@ requestAPIData = () => {
             <FaceRecognition faceBox={box} imageInput={imageUrl}/>      
           </div>) 
          : (
-           
           route === 'signin'
-           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
+           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser} showLoginFail={this.showLoginFail} errorLogin={this.state.errorLogin}/>
            : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
          )
          }

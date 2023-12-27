@@ -5,7 +5,7 @@ class SignInForm extends React.Component {
         super();
         this.state = {
             signInEmail: '',
-            sigInPassword: ''
+            sigInPassword: '', 
         }
     }
     
@@ -30,16 +30,22 @@ class SignInForm extends React.Component {
             })
         })
         .then( response => response.json())
-        .then( user => {
-            if (user.id){
-                this.props.loadUser(user);
+        .then( response => {
+            if (response.id){
+                this.props.loadUser(response);
                 this.props.onRouteChange('home');
+            } else {
+                this.props.showLoginFail(response);
             }
+            
+            
         })
+        
+        
     }
 
     render(){
-        const {onRouteChange} = this.props;
+        const {onRouteChange, errorLogin} = this.props;
         return (
             <div className="br2 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l center shadow-5">
             <div className="pa4 black-80">
@@ -65,8 +71,12 @@ class SignInForm extends React.Component {
                     <div className="lh-copy mt3">
                         <p onClick={()=> onRouteChange('register')} href="#0" className="f6 link dim black db pointer">Register</p>
                     </div>
+                    <div className="red w-100">
+                        <p>{errorLogin}</p>
+                    </div>
                 </div>
             </div>
+            
         </div>
         )
     }
