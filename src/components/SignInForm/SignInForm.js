@@ -1,4 +1,5 @@
 import React from "react";
+import Loading from "../Loading/loading";
 
 class SignInForm extends React.Component {
     constructor() {
@@ -18,7 +19,7 @@ class SignInForm extends React.Component {
     }
 
     onSubmitSignIn= () => {
-        
+        this.props.onRouteChange('loading');
         fetch('https://facerecognitionbrain-api.azurewebsites.net/signin', {
             method: 'POST',
             headers: { 
@@ -35,6 +36,7 @@ class SignInForm extends React.Component {
                 this.props.loadUser(response);
                 this.props.onRouteChange('home');
             } else {
+                this.props.onRouteChange('signIn')
                 this.props.showLoginFail(response);
             }
             
@@ -45,40 +47,44 @@ class SignInForm extends React.Component {
     }
 
     render(){
-        const {onRouteChange, errorLogin} = this.props;
+        const {onRouteChange, errorLogin, route} = this.props;
         return (
+            
             <div className="br2 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l center shadow-5">
-            <div className="pa4 black-80 w-60">
-                <div className="measure">
-                    <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f1 fw6 ph0 mh0">Sign In</legend>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                            <input 
-                                onChange={this.onEmailChange}
-                                className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address"/>
+                <div className="pa4 black-80 w-60">
+                    <div className="measure">
+                        <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
+                            <legend className="f1 fw6 ph0 mh0">Sign In</legend>
+                            <div className="mt3">
+                                <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
+                                <input 
+                                    onChange={this.onEmailChange}
+                                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address"/>
+                            </div>
+                            <div className="mv3">
+                                <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
+                                <input 
+                                    onChange={this.onPasswordChange}
+                                    className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
+                            </div>
+                            <div className="red w-100">
+                                {
+                                    route === 'signIn'
+                                    ? <p>{errorLogin}</p>
+                                    : <Loading />
+                                }
+                            </div>
+                        </fieldset>
+                        <div>
+                            <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in"/>
                         </div>
-                        <div className="mv3">
-                            <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                            <input 
-                                onChange={this.onPasswordChange}
-                                className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password" />
+                        <div className="lh-copy mt3">
+                            <p onClick={()=> onRouteChange('register')} href="#0" className="f6 link dim black db pointer">Register</p>
                         </div>
-                        <div className="red w-100">
-                            <p>{errorLogin}</p>
-                        </div>
-                    </fieldset>
-                    <div>
-                        <input onClick={this.onSubmitSignIn} className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in"/>
+                        
                     </div>
-                    <div className="lh-copy mt3">
-                        <p onClick={()=> onRouteChange('register')} href="#0" className="f6 link dim black db pointer">Register</p>
-                    </div>
-                    
                 </div>
             </div>
-            
-        </div>
         )
     }
 }

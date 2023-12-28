@@ -8,6 +8,7 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignInForm from './components/SignInForm/SignInForm';
 import Register from './components/Register/Register';
 
+
 const initialState = {
   input: '',
   imageUrl: '',
@@ -209,7 +210,6 @@ requestAPIData = () => {
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
         
         { 
-        
         route === 'home'
          ? (<div>
             <Rank user={this.state.user.name} entries={this.state.user.entries}/>
@@ -217,10 +217,11 @@ requestAPIData = () => {
             <FaceRecognition faceBox={box} imageInput={imageUrl}/>      
           </div>) 
          : (
-          route === 'signIn'
-           ? <SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser} showLoginFail={this.showLoginFail} errorLogin={errorLogin}/>
-           : <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
-         )
+          route === 'signIn' || route === 'loading'
+           ? (<SignInForm onRouteChange={this.onRouteChange} loadUser={this.loadUser} showLoginFail={this.showLoginFail} errorLogin={errorLogin} route={route}/>)
+           : (<Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>)
+            
+           )
          }
         <ParticlesBg type="cobweb" bg={true} />
       </div>
