@@ -4,15 +4,18 @@ import Navigation from './components/Navigation/Navigation';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import ParticlesBg from 'particles-bg'
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
+//import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SignInForm from './components/SignInForm/SignInForm';
 import Register from './components/Register/Register';
+import FoodRecognition from './components/FoodRecognition/FoodRecognition';
+//const baseURL = "https://facerecognitionbrain-api.azurewebsites.net/";
+
 
 
 const initialState = {
   input: '',
   imageUrl: '',
-  box: {},
+  foodList: [],
   route: 'signIn',
   isSignedIn: false,
   errorLogin: "",
@@ -48,6 +51,9 @@ showLoginFail = (data) => {
   })
 }
 
+listFoodItems = (data) => {
+  return data.outputs[0].data.concepts;
+}
 
 
 calculateFacePosition = (data) => {
@@ -69,8 +75,13 @@ displayFaceBox = (box) => {
   this.setState({box: box})
 }
 
+displayfoodList = (foodList) => {
+  this.setState({foodList: foodList})
+}
+
+
 requestAPIData = () => {
-  fetch("https://facerecognitionbrain-api.azurewebsites.net//imageurl", {
+  fetch("https://facerecognitionbrain-api.azurewebsites.nt/imageurl", {
       method: 'post',
           headers: { 
               'content-type': 'application/json'
@@ -82,7 +93,7 @@ requestAPIData = () => {
   .then(response => response.json())
   .then( data => {
     if (data){
-      fetch("https://facerecognitionbrain-api.azurewebsites.net/image", {
+      fetch('https://facerecognitionbrain-api.azurewebsites.net/image', {
         method: 'put',
             headers: { 
                 'content-type': 'application/json'
@@ -96,11 +107,11 @@ requestAPIData = () => {
         this.setState(Object.assign(this.state.user,{entries: count}))
       })
       .catch(err => console.log("Could not get user's entries"))
-      console.log(data.outputs[0].data.regions[0].region_info.bounding_box)
-      this.displayFaceBox(this.calculateFacePosition(data))
-    }
-  })
-  .catch(err => "Unable to work with API")
+      // Process image data
+      this.displayfoodList(this.listFoodItems(data));
+      //this.displayFaceBox(this.calculateFacePosition(data))
+    } else console.log("No data received");
+  }).catch(err => console.log(err) )
     
 }
 /*
@@ -204,7 +215,7 @@ requestAPIData = () => {
   }
 
   render() {
-     const {isSignedIn, imageUrl, route, box, errorLogin} = this.state;
+     const {isSignedIn, imageUrl, route, errorLogin, foodList} = this.state;
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={isSignedIn} />
@@ -214,7 +225,7 @@ requestAPIData = () => {
          ? (<div>
             <Rank user={this.state.user.name} entries={this.state.user.entries}/>
             <ImageLinkForm onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-            <FaceRecognition faceBox={box} imageInput={imageUrl}/>      
+            <FoodRecognition imageInput={imageUrl} foodList={foodList}/>      
           </div>) 
          : (
           route === 'signIn' || route === 'loading'
