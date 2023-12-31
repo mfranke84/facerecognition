@@ -15,8 +15,8 @@ import FoodRecognition from './components/FoodRecognition/FoodRecognition';
 const initialState = {
   input: '',
   imageUrl: '',
-  foodList: {},
-  route: 'home',
+  foodList: [],
+  route: 'signIn',
   isSignedIn: false,
   errorLogin: "",
   user: {
@@ -81,7 +81,7 @@ displayfoodList = (foodList) => {
 
 
 requestAPIData = () => {
-  fetch("http://localhost:3000/imageurl", {
+  fetch("https://facerecognitionbrain-api.azurewebsites.nt/imageurl", {
       method: 'post',
           headers: { 
               'content-type': 'application/json'
@@ -92,9 +92,8 @@ requestAPIData = () => {
     })
   .then(response => response.json())
   .then( data => {
-    this.displayfoodList(this.listFoodItems(data));
-    /*if (data){
-      fetch('http://localhost:3000/imageurl', {
+    if (data){
+      fetch('https://facerecognitionbrain-api.azurewebsites.net/image', {
         method: 'put',
             headers: { 
                 'content-type': 'application/json'
@@ -109,11 +108,10 @@ requestAPIData = () => {
       })
       .catch(err => console.log("Could not get user's entries"))
       // Process image data
-      
+      this.displayfoodList(this.listFoodItems(data));
       //this.displayFaceBox(this.calculateFacePosition(data))
-    }*/
-  })
-  .catch(err => "Unable to work with API")
+    } else console.log("No data received");
+  }).catch(err => console.log(err) )
     
 }
 /*
