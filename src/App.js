@@ -81,7 +81,7 @@ displayfoodList = (foodList) => {
 
 
 requestAPIData = () => {
-  fetch("https://facerecognitionbrain-api.azurewebsites.nt/imageurl", {
+  fetch("https://facerecognitionbrain-api.azurewebsites.net/imageurl", {
       method: 'post',
           headers: { 
               'content-type': 'application/json'
